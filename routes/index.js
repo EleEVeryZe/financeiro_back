@@ -1,25 +1,41 @@
 var express = require('express');
 var router = express.Router();
 const { PutObjectCommand, GetObjectCommand, S3Client } = require("@aws-sdk/client-s3");
-const s3Client = new S3Client({ region: process.env.AWS_REGION });
-
+const s3Client = new S3Client({ region: "sa-east-1" });
 
 /* GET home page. */
 router.get('/', async function(req, res, next) {  
+  res.setHeader("Access-Control-Allow-Origin", "*"); // Allow any origin
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS"); // Allowed methods
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+
   const command = new GetObjectCommand({
     Bucket: "myfinanceiro", 
     Key: "financeiro.json"
 });
 
-  const { body } = await s3Client.send(command);
-  res.send(body);
+  const { Body } = await s3Client.send(command);
+  res.send(await streamToString(Body));
 });
 
 const sanatizeBody = () => {
   
 }
 
+function streamToString(stream) {
+  return new Promise((resolve, reject) => {
+    const chunks = [];
+    stream.on("data", (chunk) => chunks.push(chunk));
+    stream.on("end", () => resolve(Buffer.concat(chunks).toString("utf8")));
+    stream.on("error", reject);
+  });
+}
+
 router.post('/', async function(req, res, next) {
+
+  res.setHeader("Access-Control-Allow-Origin", "*"); // Allow any origin
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS"); // Allowed methods
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
   
   sanatizeBody(req.body);
 

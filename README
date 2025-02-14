@@ -10,3 +10,9 @@ fnm install 22
 
 
 Install git on Ec2
+
+
+
+## TIPS ##
+* Kill process of port
+ kill -9 $(lsof -t -i:80 -sTCP:LISTEN)
