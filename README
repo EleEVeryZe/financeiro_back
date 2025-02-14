@@ -1,0 +1,12 @@
+Instal node on Ec2
+
+sudo su -- to get in admin mode
+
+curl -o- https://fnm.vercel.app/install | bash
+
+source /root/.bashrc
+
+fnm install 22
+
+
+Install git on Ec2
