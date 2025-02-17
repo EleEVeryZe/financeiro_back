@@ -4,9 +4,9 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 require('dotenv').config()
 var indexRouter = require('./routes/index');
+var healthRouter = require('./routes/health');
 const morgan = require('morgan');
 const logger = require("./config/winston");
-
 
 var app = express();
 
@@ -23,6 +23,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
+app.use('/', healthRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
