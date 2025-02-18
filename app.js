@@ -10,6 +10,10 @@ const logger = require("./config/winston");
 
 var app = express();
 
+const cors = require('cors');
+
+app.use(cors()); // Allow all origins
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
@@ -42,10 +46,11 @@ app.use(function(err, req, res, next) {
 });
 
 process.on("uncaughtException", (err) => {
-  logger.error("Uncaught Exception:" + JSON.stringify(err));
+  console.error('There was an uncaught error', err);
 });
 
 process.on("unhandledRejection", (reason, promise) => {
+  console.error('Unhandled Rejection at:', promise, 'reason:', reason);
   logger.error("Unhandled Rejection at:" + JSON.stringify(reason));
 });
 

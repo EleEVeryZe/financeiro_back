@@ -1,15 +1,22 @@
 Instal node on Ec2
 
-sudo su -- to get in admin mode
+* sudo su -- to get in admin mode
 
-curl -o- https://fnm.vercel.app/install | bash
+* curl -o- https://fnm.vercel.app/install | bash
 
-source /root/.bashrc
+* source /root/.bashrc
 
-fnm install 22
+* fnm install 22
 
 
 Install git on Ec2
+* yum install git
+
+Clone Application
+git clone https://github.com/EleEVeryZe/financeiro_back.git
+cd financeiro_back
+npm i
+npm start
 
 
 
