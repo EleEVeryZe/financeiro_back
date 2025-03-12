@@ -100,6 +100,31 @@ router.put("/", async function (req, res, next) {
 });
 
 
+router.put("/bulk", async function (req, res, next) {
+  res.setHeader("Access-Control-Allow-Origin", "*"); // Allow any origin
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS"); // Allowed methods
+  res.setHeader("Access-Control-Allow-Headers", "*");
+
+  if (req.body.filter(re => sanatizeBody(req.body) !== false).length > 0) {
+    res.status(404).send();
+    return;
+  }
+
+  let reg = registros.filter(reg => req.body.map(regBody => regBody.id).indexOf(reg.id) === -1);
+  req.body.map(x => reg.push(x));  
+
+  const command = new PutObjectCommand({
+    Bucket: "myfinanceiro",
+    Key: "financeiro.json", // File name in S3
+    Body: JSON.stringify(reg),
+  });
+
+  await s3Client.send(command);
+  registros = reg;
+  res.render("index", { title: "Express" });
+});
+
+
 router.delete("/:id", async function (req, res, next) {
   res.setHeader("Access-Control-Allow-Origin", "*"); // Allow any origin
   res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS"); // Allowed methods
